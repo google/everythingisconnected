@@ -2,6 +2,8 @@ Everything is connected
 
 A knowledge puzzle game. For more user-facing information, see about.html.
 
+This is not an official Google product.
+
 The code is rather straightforward. Most of the trouble is about getting it
 to run decently on mobile. Last time I checked, there was still a problem on
 iOS (the tiles seem off).
