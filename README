@@ -1,0 +1,26 @@
+Everything is connected
+
+A knowledge puzzle game. For more user-facing information, see about.html.
+
+The code is rather straightforward. Most of the trouble is about getting it
+to run decently on mobile. Last time I checked, there was still a problem on
+iOS (the tiles seem off).
+
+There is no backend (besides Wikidata itself). The game runs entirely in the
+browser.
+
+Terminology from the code:
+* a tile is a single piece of the puzzle, whether it is in the deck or on the
+  board.
+* the board is the place where all the tiles will eventually end up.
+* the deck is the set of tiles that the player has available.
+
+The starting tiles are literally part of the board, that is why they cannot
+be moved. The code for the tiles in the deck and on the board overlap.
+
+If you create new puzzles, please put them on my Wikidata user page:
+https://www.wikidata.org/wiki/User:Denny/Everything_is_conntected
+so that others can find them.
+
+If you want to take over the maintenance of the code, I'd be very happy. Please
+contact me at vrandecic@google.com

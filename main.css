@@ -1,0 +1,88 @@
+/**	Copyright 2016 Google Inc.
+/*
+/*	Licensed under the Apache License, Version 2.0 (the "License");
+/*	you may not use this file except in compliance with the License.
+/*	You may obtain a copy of the License at
+/*
+/*	    http://www.apache.org/licenses/LICENSE-2.0
+/*
+/*	Unless required by applicable law or agreed to in writing, software
+/*	distributed under the License is distributed on an "AS IS" BASIS,
+/*	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/*	See the License for the specific language governing permissions and
+/*	limitations under the License.
+ */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,600,700,800&subset=latin,cyrillic-ext,greek-ext,vietnamese,greek,latin-ext,cyrillic);
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	background-color: #FAF9F4;
+	color: #564A37;
+}
+a {
+	text-decoration : none;
+}
+#board {
+	height: 100px;
+	width: 100px;
+	top: 80px;
+	left: 10px;
+	background: #BAB9B4;
+	position: fixed;
+}
+.tile {
+	width: 80px;
+	height: 80px;
+	padding: 5px;
+	position: fixed;
+}
+.tile span {
+	background-color: rgba(255, 255, 255, 0.7);
+    -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+   -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+           hyphens: auto;
+}
+.fixed {
+	border: 3px solid #000;
+}
+.connection {
+	width: 20px;
+	height: 20px;
+	position: fixed;
+	text-align: center;
+	cursor: default;
+}
+.nofit {
+	background-color: #ff8888;
+}
+.fit {
+	background-color: #333333;
+}
+.fit .popup {
+    position: absolute;
+    top: 3px; 
+	left: 3px;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 2px;
+    max-width: 240px;
+    min-width: 50px;
+    z-index: 100;
+    display: none;
+}
+#help {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+}
+#wikidatalogo {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+}
+table, td {
+    border: 1px solid black;
+}

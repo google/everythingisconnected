@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <title>Everything is connected - About</title>
+        <link rel="stylesheet" href="main.css">
+	</head>
+    <body>
+		<h1>Everything is connected</h1>
+		<p>
+<em>Everything is connected.
+<a href="https://commons.wikimedia.org/wiki/File:Wikidata%27s_World.webm">
+Knowledge is to understand these connections</a>.</em>
+		</p><p>
+<strong>Everything is connected</strong> is a knowledge game &mdash;
+a game relying on knowledge about the world in order to be solved.
+Like a quiz, and yet different.
+		</p><p>
+<strong>Everything is connected</strong> is also a puzzle.
+You get some pieces and have to figure out how they fit together.
+How they are connected.
+But unlike with a normal puzzle, whether or not two pieces fit together
+does not depend on the shape of the piece - afterall, all pieces are squares but it depends whether or not there is a known connection between them.
+		</p><p>
+What is a known connection? 
+Each piece of the puzzle represents an entity in the world.
+It can be a country, a famous person, a song, a religion, or something else
+entirely.
+There are hundreds of different types of relations:
+for example, a person could be a <em>citizen</em> of a country, or
+the <em>author</em> of a song.
+A city can be the <em>place of a birth</em> of a person, or
+the <em>capital</em> of a country.
+		</p><p>
+Just like in every other puzzle, in order to place a piece somewhere on the
+board, it has to fit to all of its neighbours.
+Once all pieces are placed, the puzzle is solved.
+		</p>
+		<p><a href="index.html">[back to the game]</a></p>
+		<h2>Credits</h2>
+		<p>
+<strong>Everything is connected</strong> was written by 
+<a href="http://denny.vrandecic.de">Denny Vrandečić</a>.
+		</p><p>
+The data is based on
+<a href="https://www.wikidata.org">Wikidata</a>.
+All images are from
+<a href="https://commons.wikimedia.org">Wikimedia Commons</a>.
+The game is written using
+<a href="https://jquery.com">jQuery</a> and
+<a href="https://jqueryui.com">jQuery UI</a>.
+The code is available on
+<a href="https://github.com/vrandezo/everythingisconnected">Github</a>,
+and contributors to the code are very welcome.
+Actually, if you want to take over the maintenance of the game,
+please contact me.
+		</p>
+		<h2>How does the game know about the relations?</h2>
+		<p>
+The game is based on Wikidata, the free and open knowledge base.
+Wikidata is like a machine-readable Wikipedia, although much younger.
+And like Wikipedia, Wikidata can be edited by anyone.
+Wikidata is incomplete and may contain errors.
+If you find errors in Wikidata while playing <em>Everything is connected</em>,
+you are welcome to join Wikidata and fix them.
+		</p>
+		<h2>Can I play this in other languages than English?</h2>
+		<p>
+Yes, you can.
+		</p><p>
+Just put the lang parameter to another language code.
+More than 300 languages are available.
+And if a certain puzzle piece doesn't have label in your language, you can
+just go to Wikidata and add it there.
+		</p><p>
+Examples: play in
+<a href="index.html?lang=de">German</a>,
+<a href="index.html?lang=uz">Uzbek</a>,
+<a href="index.html?lang=hr">Croatian</a>,
+<a href="index.html?lang=es">Spanish</a>,
+<a href="index.html?lang=zh">Chinese</a>,
+<a href="index.html?lang=ru">Russian</a>, or
+<a href="index.html?lang=ka">Georgian</a>.
+		</p>
+		<h2>Can I create my own puzzles?</h2>
+		<p>
+Yes, you can.
+		</p><p>
+Probably the easiest way to do so is to take a pen and a paper, and first
+create a "solved" puzzle:
+make a grid, and fill every field you want to fill.
+Not every field has to be filled - the result does not have to be a completely
+filled square.
+		</p><p>
+Example:
+<table>
+	<tr><td> - </td><td>Jackie Kennedy</td><td>New York City</td></tr>
+	<tr><td>Harvard</td><td>JFK</td><td>USA</td></tr>
+</table>
+		</p><p>
+Note that you can only use entities for the puzzle that are available in
+Wikidata, and only relations that are known to Wikidata will be counted as
+valid known relations.
+		</p><p>
+Now go to Wikidata, and for each of the entities find their corresponding Q-Id.
+Write them down in the grid.
+		</p><p>
+Example:
+<table>
+	<tr>
+		<td> - Q0</td>
+		<td>
+			Jackie Kennedy 
+			<a href="https://www.wikidata.org/wiki/Q165421">Q165421</a>
+		</td>
+		<td>
+			New York City 
+			<a href="https://www.wikidata.org/wiki/Q60">Q60</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Harvard 
+			<a href="https://www.wikidata.org/wiki/Q13371">Q13371</a>
+		</td>
+		<td>
+			JFK 
+			<a href="https://www.wikidata.org/wiki/Q9696">Q9696</a>
+		</td>
+		<td>
+			USA 
+			<a href="https://www.wikidata.org/wiki/Q30">Q30</a>
+		</td>
+	</tr>
+</table>
+		</p><p>
+Now start on the top line of your grid, and write the Q-Id consecutively down.
+Once one line is finished, close it with a /, and then continue with the next
+line.
+If you have a gap in your grid, just put a Q0 there.
+		</p><p>
+Example:
+for the above example, we would write down:
+<i>Q0Q165421Q60/Q13371Q9696Q30</i>.
+		</p><p>			
+Finally, decide which of the tiles should already be preset and fixed - if any -
+and add a + just right behind them.
+		</p><p>
+Example:
+we could decide that Harvard will be preset, so we add a + just after Q13371:
+<i>Q0Q165421Q60/Q13371+Q9696Q30</i>.
+		</p><p>
+The resulting string can be used as the board parameter on the URL for the game.
+You can then send the URL to others to try to solve your puzzle.
+		</p><p>
+Example:
+our example would be accessible at
+<a href="index.html?board=Q0Q165421Q60/Q13371+Q9696Q30">
+index.html?board=Q0Q165421Q60/Q13371+Q9696Q30</a>
+<br>
+You can even switch the language by adding a language parameter too, say, to Greek:
+<a href="index.html?board=Q0Q165421Q60/Q13371+Q9696Q30&lang=el">
+index.html?board=Q0Q165421Q60/Q13371+Q9696Q30&lang=el</a>
+<i></i>.
+		</p><p>
+If you create levels you like, share them on
+<a href="https://www.wikidata.org/wiki/User:Denny/Everything_is_connected">
+my Wikidata page</a>.
+		</p>
+		<p><a href="index.html">[back to the game]</a></p>
+	</body>
+</html>
