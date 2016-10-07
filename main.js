@@ -15,7 +15,6 @@
 (function ($) {$(function() {
 /** TODOs
 / * link or display Wikipedia article
-/ * going from puzzle to puzzle
 / * editor for new puzzles
 / * todos in code
   */
@@ -361,7 +360,7 @@ var checkBoard = function(board, language, kb) {
 				}
 			}
 	if (allSet && allFit) {
-		$('h1').text('Congratulations!');
+		$('h1').text('Congratulations!').after('<p style="margin-top:-1em;">[<a href="https://www.wikidata.org/wiki/User:Denny/Everything_is_connected">List of levels</a>]</p>');
 	}
 };
 
