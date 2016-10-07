@@ -28,13 +28,13 @@ a {
 	top: 80px;
 	left: 10px;
 	background: #BAB9B4;
-	position: fixed;
+	position: absolute;
 }
 .tile {
 	width: 80px;
 	height: 80px;
 	padding: 5px;
-	position: fixed;
+	position: absolute;
 }
 .tile span {
 	background-color: rgba(255, 255, 255, 0.7);
@@ -51,7 +51,7 @@ a {
 .connection {
 	width: 20px;
 	height: 20px;
-	position: fixed;
+	position: absolute;
 	text-align: center;
 	cursor: default;
 }

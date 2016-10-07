@@ -26,8 +26,8 @@ var log = function(l) {
 	console.log(l);
 };
 var fieldSize = 100;
-var topSpace = 100;
-var leftSpace = 15;
+var topSpace = 5;
+var leftSpace = 5;
 var wiggleSpace = 20;
 var finished = false;
 
@@ -65,7 +65,7 @@ var createBoard = function(lang, board) {
 	
 	shuffle(board.deck);
 	$.each(board.deck, function(index, qid) {
-		$("#deck").append('<div id="' + qid + '" class="ui-widget-content tile side"><span>' + qid + '</span></div>');
+		$("#board").append('<div id="' + qid + '" class="ui-widget-content tile side"><span>' + qid + '</span></div>');
 		$('#' + qid).css({
 			left: (index % board.maxWidth)*fieldSize+leftSpace-wiggleSpace/2 + Math.floor(Math.random()*wiggleSpace),
 			top: (Math.floor(index/board.maxWidth)+board.maxHeight)*fieldSize+topSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace)
@@ -124,7 +124,7 @@ var validateBoard = function(param) {
 };
 var initBoard = function() {
 	var boardParam = urlParam('board');
-	if (!validateBoard(boardParam)) {
+	if (boardParam!=null && !validateBoard(boardParam)) {
 		log("Using default board as parameter board is invalid: " + boardParam);
 		boardParam = null;
 	}
@@ -186,7 +186,7 @@ var showConnection = function(y1, x1, y2, x2, p, kb, language) {
 		var proplabel = getLabel(kb[p], language);
 		elem = $('<div class="connection fit">&nbsp;<span class="popup">' + proplabel + '</span></div>');
 		// the following is to fixup popups on mobile
-	    elem.attr("data-hide", false);
+		elem.attr("data-hide", false);
 		elem.click(function () {
 	        var $popup = $(this).find(".popup");
 	        if ($popup.attr("data-hide") === "false") {
@@ -200,7 +200,7 @@ var showConnection = function(y1, x1, y2, x2, p, kb, language) {
 	    elem.mouseleave(function () { $(this).find(".popup").hide(); }); 
 	}
 	elem.css({top: y, left: x});
-	$("body").append(elem);
+	$("#board").append(elem);
 };
 var clearConnections = function() {
 	$(".connection").remove();
