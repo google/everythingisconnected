@@ -38,6 +38,7 @@ a {
 }
 .tile span {
 	background-color: rgba(255, 255, 255, 0.7);
+	font-size: 80%;
     -ms-word-break: break-all;
         word-break: break-all;
         word-break: break-word;
@@ -46,7 +47,7 @@ a {
            hyphens: auto;
 }
 .fixed {
-	border: 3px solid #000;
+	outline: 3px solid #000;
 }
 .connection {
 	width: 20px;
