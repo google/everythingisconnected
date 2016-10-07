@@ -26,3 +26,7 @@ so that others can find them.
 
 If you want to take over the maintenance of the code, I'd be very happy. Please
 contact me at vrandecic@google.com
+
+Third party content is provided in the third_party directory and described
+in third_party/README
+
