@@ -14,7 +14,7 @@
  */
 (function ($) {$(function() {
 /** TODOs
-/ * smarter place for the initial tiles
+/ * link or display Wikipedia article
 / * going from puzzle to puzzle
 / * editor for new puzzles
 / * todos in code
@@ -64,11 +64,18 @@ var createBoard = function(lang, board) {
 	$("#board").height(board.maxHeight*fieldSize + 5);
 	
 	shuffle(board.deck);
+	var leftshift = 0;
+	var topshift = 0;
+	if (($(window).width()-board.maxWidth*fieldSize)>($(window).height()-board.maxHeight*fieldSize)) {
+		leftshift = board.maxWidth;
+	} else {
+		topshift = board.maxHeight;
+	}
 	$.each(board.deck, function(index, qid) {
 		$("#board").append('<div id="' + qid + '" class="ui-widget-content tile side"><span>' + qid + '</span></div>');
 		$('#' + qid).css({
-			left: (index % board.maxWidth)*fieldSize+leftSpace-wiggleSpace/2 + Math.floor(Math.random()*wiggleSpace),
-			top: (Math.floor(index/board.maxWidth)+board.maxHeight)*fieldSize+topSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace)
+			left: (index % board.maxWidth+leftshift)*fieldSize+leftSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace),
+			top: (Math.floor(index/board.maxWidth)+topshift)*fieldSize+topSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace)
 		});
 	});
 	var kb = {};
