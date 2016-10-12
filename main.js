@@ -14,6 +14,7 @@
  */
 (function ($) {$(function() {
 /** TODOs
+/ * check if the actual puzzle is solvable right now, because Wikidata changes
 / * link or display Wikipedia article
 / * editor for new puzzles
 / * todos in code
