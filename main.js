@@ -278,6 +278,7 @@ var setImage = function(item, tile) {
 	if (filename == null) {
 		return;
 	}
+	$('#imageSourcesList').append('<p><a href="https://commons.wikimedia.org/wiki/File:' + filename + '">' + filename + '</a></p>')
 	$.getJSON('https://commons.wikimedia.org/w/api.php?callback=?', {
 		action: 'query' ,
 		formatversion: 2,
@@ -364,7 +365,7 @@ var checkBoard = function(board, language, kb) {
 		$('h1').text('Congratulations!').after('<p style="margin-top:-1em;">[<a href="https://www.wikidata.org/wiki/User:Denny/Everything_is_connected">List of levels</a>]</p>');
 	}
 };
-
 createBoard(initLanguage(), initBoard());
 
+$('#imageSources').click(function() { $('#imageSourcesList').toggle() });
 });}(jQuery));

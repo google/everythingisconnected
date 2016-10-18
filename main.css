@@ -87,3 +87,20 @@ a {
 table, td {
     border: 1px solid black;
 }
+#imageSources {
+	position: fixed;
+	bottom: 0px;
+	right: 120px;
+}
+#imageSourcesList {
+	position: fixed;
+	bottom: 30px;
+	right: 120px;
+	border: 1px solid black;
+	background-color: white;
+	font-size: 60%;
+	line-height: 60%;
+	padding-left: 3px;
+	padding-right: 3px;
+	display: none;
+}
