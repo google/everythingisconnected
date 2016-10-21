@@ -14,7 +14,6 @@
  */
 (function ($) {$(function() {
 /** TODOs
-/ * check if the actual puzzle is solvable right now, because Wikidata changes
 / * link or display Wikipedia article
 / * editor for new puzzles
 / * todos in code
@@ -106,7 +105,7 @@ var createBoard = function(lang, board) {
 				board.field[y][x].current = ui.draggable.attr('id');
 				board.pieces[qid] = [y, x];
 			}
-			checkBoard(board,lang, kb);
+			checkBoard(board, lang, kb);
 		}
 	});
 	loadBoardEntities(kb, lang, board);
@@ -229,9 +228,12 @@ var loadEntities = function(toLoad, entities, callbackFunction, argumentsToCallb
 		}
 	});
 };
-var idle = function() { finished=true; };
+var idle = function() {
+	finished=true;
+};
 var loadProperties = function(entities, args) {
 	paintTiles(args.board, args.language, args.kb);
+	solvableBoard(args.board, args.kb)
 	var properties = [];
 	$.each(args.kb, function(index, item) {
 		$.each(item.claims, function(prop, values) {
@@ -247,8 +249,8 @@ var loadBoardEntities = function(kb, language, board) {
 	for (y=0;y<board.field.length;y++)
 		for (x=0;x<board.field[y].length;x++)
 			if (board.field[y][x].exists)
-				boardEntities.push(board.field[y][x].solution)
-				loadEntities(boardEntities, kb, loadProperties, {board: board, language: language, kb: kb});
+				boardEntities.push(board.field[y][x].solution);
+	loadEntities(boardEntities, kb, loadProperties, {board: board, language: language, kb: kb});
 };
 var getLabel = function(item, language) {
 	if((typeof(item['labels']) == 'undefined')||(typeof(item.labels[language]) == 'undefined')) {
@@ -363,6 +365,28 @@ var checkBoard = function(board, language, kb) {
 			}
 	if (allSet && allFit) {
 		$('h1').text('Congratulations!').after('<p style="margin-top:-1em;">[<a href="https://www.wikidata.org/wiki/User:Denny/Everything_is_connected">List of levels</a>]</p>');
+	}
+};
+var solvableBoard = function(board, kb) {
+	var allFit = true;
+	for (y=0;y<board.field.length;y++)
+		for (x=0;x<board.field[y].length;x++)
+			if (board.field[y][x].exists) {
+				var f1 = board.field[y][x].solution;
+				if (x+1<board.field[y].length)
+					if (board.field[y][x+1].exists) {
+						var f2 = board.field[y][x+1].solution;
+						if (!fits(f1, f2, kb)) allFit = false;
+					}
+				if (y+1<board.field.length)
+					if (board.field[y+1][x].exists) {
+						var f2 = board.field[y+1][x].solution;
+						if (!fits(f1, f2, kb)) allFit = false;
+					}
+			}
+	if (!allFit) {
+		$('body').css('background-color', '#fdd');
+		$('h1').after('<p style="margin-top:-1em;">Warning! This level might be unsolvable <a href="about.html#unsolvable">[see more]</a></p>');
 	}
 };
 createBoard(initLanguage(), initBoard());
