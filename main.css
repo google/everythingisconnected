@@ -104,3 +104,8 @@ table, td {
 	padding-right: 3px;
 	display: none;
 }
+#article {
+	position: absolute;
+	max-width: 30em;
+    z-index: -100;
+}

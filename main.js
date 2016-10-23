@@ -14,16 +14,12 @@
  */
 (function ($) {$(function() {
 /** TODOs
-/ * link or display Wikipedia article
 / * editor for new puzzles
 / * todos in code
   */
 
 evil = {}; // just a global for debugging reasons, should not be used in code
 
-var log = function(l) {
-	console.log(l);
-};
 var fieldSize = 100;
 var topSpace = 5;
 var leftSpace = 5;
@@ -57,6 +53,7 @@ var createBoard = function(lang, board) {
 				'<div class="' + tileclass + ' tile ui-widget-content" id="' + pos + '"><span>' + qid + '</span></div>'
 			);
 			$('#' + pos).css({top: lineindex*fieldSize+topSpace, left: rowindex*fieldSize+leftSpace});
+			$('#' + pos).data('qid', qid);
 		});
 	});
 	$("#board").width(board.maxWidth*fieldSize + 5);
@@ -70,12 +67,18 @@ var createBoard = function(lang, board) {
 	} else {
 		topshift = board.maxHeight;
 	}
+	if (leftshift>0) {
+		$("#article").css({left: (leftshift+0.5)*fieldSize+leftSpace});
+	} else {
+		$("#article").css({top: (topshift+1.5)*fieldSize+topSpace});		
+	}
 	$.each(board.deck, function(index, qid) {
 		$("#board").append('<div id="' + qid + '" class="ui-widget-content tile side"><span>' + qid + '</span></div>');
 		$('#' + qid).css({
 			left: (index % board.maxWidth+leftshift)*fieldSize+leftSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace),
 			top: (Math.floor(index/board.maxWidth)+topshift)*fieldSize+topSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace)
 		});
+		$('#' + qid).data('qid', qid);
 	});
 	var kb = {};
 	
@@ -108,7 +111,55 @@ var createBoard = function(lang, board) {
 			checkBoard(board, lang, kb);
 		}
 	});
-	loadBoardEntities(kb, lang, board);
+	
+	var articles = {};
+	loadBoardEntities(kb, lang, board, articles);
+	
+	var displayArticle = function(event) {
+		var id = $(event.target).data('qid');
+		if (id in articles) {
+			$("#article").html(articles[id]);
+		}
+	};
+	$(".fixed").mouseenter(displayArticle);
+	$(".side").mouseenter(displayArticle);
+};
+var loadExtracts = function(toLoad, qids, lang, articles) {
+	var loadNow = toLoad.slice(0, 16);
+	var loadLater = toLoad.slice(16);
+	$.ajax({
+		dataType: "jsonp",
+		url: 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exsentences=3&exlimit=20&exintro=1&titles=' + loadNow.join('|')
+	}).done(function ( response ) {
+		$.each(response.query.pages, function(index, entity) {
+			if (typeof(entity.extract) == 'undefined') return;
+			if (entity.extract=='') return;
+			var text = entity.extract;
+			text += '<a href="https://' + lang + '.wikipedia.org/wiki/' + entity.title + '">[Wikipedia]</a>';
+			articles[qids[entity.title]] = text;
+		});
+		if (loadLater.length > 0) {
+			loadExtracts(loadLater, qids, lang, articles);
+		}
+	});
+};
+var loadArticles = function(kb, args) {
+	setFinished();
+	var lang = args.lang;
+	var articles = args.articles;
+	var wiki = lang + 'wiki';
+	var titles = {};
+	var qids = {};
+	var toLoad = [];
+	$.each(kb, function(index, entity) {
+		if (index[0]!='Q') return;
+		if (!('sitelinks' in entity)) return;
+		if (!(wiki in entity.sitelinks)) return;
+		if (!('title' in entity.sitelinks[wiki])) return;
+		qids[entity.sitelinks[wiki].title] = index;
+		toLoad.push(entity.sitelinks[wiki].title);
+	});
+	loadExtracts(toLoad, qids, lang, articles);
 };
 var urlParam = function(name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -131,7 +182,7 @@ var validateBoard = function(param) {
 var initBoard = function() {
 	var boardParam = urlParam('board');
 	if (boardParam!=null && !validateBoard(boardParam)) {
-		log("Using default board as parameter board is invalid: " + boardParam);
+		console.log("Using default board as parameter board is invalid: " + boardParam);
 		boardParam = null;
 	}
 	if (boardParam==null) {
@@ -228,12 +279,11 @@ var loadEntities = function(toLoad, entities, callbackFunction, argumentsToCallb
 		}
 	});
 };
-var idle = function() {
+var setFinished = function() {
 	finished=true;
 };
 var loadProperties = function(entities, args) {
-	paintTiles(args.board, args.language, args.kb);
-	solvableBoard(args.board, args.kb)
+	setFinished();
 	var properties = [];
 	$.each(args.kb, function(index, item) {
 		$.each(item.claims, function(prop, values) {
@@ -242,18 +292,21 @@ var loadProperties = function(entities, args) {
 			}
 		});
 	});
-	loadEntities(properties, args.kb, idle, {});
+	loadEntities(properties, args.kb, loadArticles, {lang: args.language, articles: args.articles});
+	paintTiles(args.board, args.language, args.kb, args.articles);
+	solvableBoard(args.board, args.kb)
 };
-var loadBoardEntities = function(kb, language, board) {
+var loadBoardEntities = function(kb, language, board, articles) {
 	boardEntities = [];
 	for (y=0;y<board.field.length;y++)
 		for (x=0;x<board.field[y].length;x++)
 			if (board.field[y][x].exists)
 				boardEntities.push(board.field[y][x].solution);
-	loadEntities(boardEntities, kb, loadProperties, {board: board, language: language, kb: kb});
+	loadEntities(boardEntities, kb, loadProperties, {board: board, language: language, kb: kb, articles: articles});
 };
 var getLabel = function(item, language) {
-	if((typeof(item['labels']) == 'undefined')||(typeof(item.labels[language]) == 'undefined')) {
+	if (typeof(item) == 'undefined') return '';
+	if ((typeof(item['labels']) == 'undefined')||(typeof(item.labels[language]) == 'undefined')) {
 		if (language=="en") {
 			return item.id;
 		} else {
@@ -261,6 +314,17 @@ var getLabel = function(item, language) {
 		}
 	}
 	return item.labels[language].value;
+};
+var getDescription = function(item, language) {
+	if (typeof(item) == 'undefined') return '';
+	if ((typeof(item['descriptions']) == 'undefined')||(typeof(item.descriptions[language]) == 'undefined')) {
+		if (language=="en") {
+			return '';
+		} else {
+			return getDescription(item, "en");
+		}
+	}
+	return item.descriptions[language].value;
 };
 var setImage = function(item, tile) {
 	var filename = null;
@@ -295,22 +359,25 @@ var setImage = function(item, tile) {
 		$(tile).css('background-image', 'url(' + url + ')');
 	});
 };
-var paintTiles = function(board, language, kb) {
+var paintTiles = function(board, language, kb, articles) {
 	for (y=0;y<board.field.length;y++)
 		for (x=0;x<board.field[y].length;x++)
 			if (board.field[y][x].exists) {
 				var f = board.field[y][x];
 				var l = getLabel(kb[f.solution], language);
+				var d = getDescription(kb[f.solution], language);
 				var tile = ''; 
 				if (f.fixed) {
 					tile = '#l' + y + 'r' + x;
 				} else {
 					tile = '#' + f.solution;
 				}
+				if (!(f.solution in articles)) {
+					articles[f.solution] = '<p><b>' + l + '</b>  <i>' + d + '</i></p>';
+				}
 				$(tile + ' span').text(l);
 				setImage(kb[f.solution], tile);
 			}
-	// TODO add descriptions?
 };
 var hasClaimObject = function(s, o, kb) {
 	var connection = false;
