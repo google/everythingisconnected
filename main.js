@@ -374,6 +374,7 @@ var paintTiles = function(board, language, kb, articles) {
 				}
 				if (!(f.solution in articles)) {
 					articles[f.solution] = '<p><b>' + l + '</b>  <i>' + d + '</i></p>';
+					if ($("#article").html()=="") { $("#article").html(articles[f.solution]); }
 				}
 				$(tile + ' span').text(l);
 				setImage(kb[f.solution], tile);
@@ -458,5 +459,6 @@ var solvableBoard = function(board, kb) {
 };
 createBoard(initLanguage(), initBoard());
 
-$('#imageSources').click(function() { $('#imageSourcesList').toggle() });
+$('#imageSources').click(function() { $('#imageSourcesList').toggle(); });
+$('#articleSwitch').click(function() { $('#article').toggle(); });
 });}(jQuery));
