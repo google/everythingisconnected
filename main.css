@@ -156,7 +156,7 @@ input:checked + .slider:before {
 }
 #article {
 	position: absolute;
-	max-width: 30em;
+	max-width: 450px;
     z-index: -100;
 	display: none;
 }

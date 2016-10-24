@@ -60,6 +60,13 @@ var createBoard = function(lang, board) {
 	$("#board").height(board.maxHeight*fieldSize + 5);
 	
 	shuffle(board.deck);
+	
+	// TODO: refactor the layouting code in the following lines
+	// the following lines are trying to determine where the best space for the
+	// article and the deck is. This code should be refactored, it is
+	// unreadable and has grown a bit without a plan. Better to rewrite it
+	// entirely. Layouting is hard. It is entirely possible that we can just
+	// let HTML do all the formatting somehow.
 	var leftshift = 0;
 	var topshift = 0;
 	if (($(window).width()-board.maxWidth*fieldSize)>($(window).height()-board.maxHeight*fieldSize)) {
@@ -67,19 +74,35 @@ var createBoard = function(lang, board) {
 	} else {
 		topshift = board.maxHeight;
 	}
-	if (leftshift>0) {
-		$("#article").css({left: (leftshift+0.5)*fieldSize+leftSpace});
+	var articleleft = leftshift;
+	var articletop = topshift;
+	if ($(window).width()>(board.maxWidth*fieldSize+200)) {
+		articleleft = board.maxWidth;
+		articletop = 0;
+	}
+	var tilesPerLine = Math.floor($(window).width()/fieldSize)-1;
+	var neededLines = Math.ceil(board.deck.length / tilesPerLine);	
+	if ($(window).height()>(neededLines+board.maxHeight+1)*fieldSize) {
+		topshift = board.maxHeight;
+		leftshift = 0;
 	} else {
-		$("#article").css({top: (topshift+1.5)*fieldSize+topSpace});		
+		tilesPerLine = board.maxWidth;
+	}
+	if (articleleft>0) {
+		$("#article").css({left: (articleleft+0.5)*fieldSize+leftSpace});
+	} else {
+		$("#article").css({top: (articletop+1.5)*fieldSize+topSpace});		
 	}
 	$.each(board.deck, function(index, qid) {
 		$("#board").append('<div id="' + qid + '" class="ui-widget-content tile side"><span>' + qid + '</span></div>');
 		$('#' + qid).css({
-			left: (index % board.maxWidth+leftshift)*fieldSize+leftSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace),
-			top: (Math.floor(index/board.maxWidth)+topshift)*fieldSize+topSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace)
+			left: ((index % tilesPerLine) +leftshift)*fieldSize+leftSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace),
+			top: (Math.floor(index/tilesPerLine)+topshift)*fieldSize+topSpace+wiggleSpace + Math.floor(Math.random()*wiggleSpace)
 		});
 		$('#' + qid).data('qid', qid);
 	});
+	// end of the code that has the weird layouting stuff in it.
+	
 	var kb = {};
 	
 	$( ".side" ).draggable({
