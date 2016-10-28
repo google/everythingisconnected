@@ -15,6 +15,7 @@
 (function ($) {$(function() {
 /** TODOs
 / * editor for new puzzles
+/ * display direction of the relation (suggestion mkroetzsch)
 / * todos in code
   */
 
