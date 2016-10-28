@@ -456,7 +456,7 @@ var checkBoard = function(board, language, kb) {
 				}
 			}
 	if (allSet && allFit) {
-		$('h1').text('Congratulations!').after('<p style="margin-top:-1em;">[<a href="https://www.wikidata.org/wiki/User:Denny/Everything_is_connected">List of levels</a>]</p>');
+		$('h1').text('Congratulations!').after('<p style="margin-top:-1em;">[<a href="https://www.wikidata.org/wiki/Wikidata:Everything_is_connected">List of levels</a>]</p>');
 	}
 };
 var solvableBoard = function(board, kb) {
