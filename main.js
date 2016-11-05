@@ -159,7 +159,7 @@ var loadExtracts = function(toLoad, qids, lang, articles) {
 			if (typeof(entity.extract) == 'undefined') return;
 			if (entity.extract=='') return;
 			var text = entity.extract;
-			text += '<a href="https://' + lang + '.wikipedia.org/wiki/' + entity.title + '">[Wikipedia]</a>';
+			text += '<a href="https://' + lang + '.wikipedia.org/wiki/' + entity.title + '" target="_blank">[Wikipedia]</a>';
 			articles[qids[entity.title]] = text;
 		});
 		if (loadLater.length > 0) {
